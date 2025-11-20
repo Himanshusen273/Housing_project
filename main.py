@@ -88,14 +88,19 @@ def train_model():
         housing_prepared = pipeline.fit_transform(housing_features)
 
         model = XGBRegressor(
-            n_estimators=350,
+        objective="reg:squarederror",
+            n_estimators=500,
             learning_rate=0.05,
             max_depth=5,
+            min_child_weight=3,
             subsample=0.8,
             colsample_bytree=0.8,
+            reg_alpha=0.0,
+            reg_lambda=2.0,
             random_state=42,
             n_jobs=-1
         )
+
 
         model.fit(housing_prepared, housing_labels)
 
