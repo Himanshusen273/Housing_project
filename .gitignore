@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Model files
+model.pkl
+pipeline.pkl
+
+# Database
+housing_data.db
+
+# Sensitive keys / security files
+certificate.pem
+
+# Gradio generated folder
+.gradio/
+
+# Dataset (optional but recommended)
+housing.csv
+
+# Logs
+*.log
