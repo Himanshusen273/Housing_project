@@ -244,4 +244,4 @@ with gr.Blocks(css=custom_css,
         outputs=admin_output
     )
 
-demo.launch(share=True)
+demo.launch()
