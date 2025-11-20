@@ -111,7 +111,7 @@ def train_model():
 # ADMIN PANEL FUNCTION
 # -----------------------------
 def view_admin_data(password):
-    ADMIN_PASSWORD = "checkstatus8086"
+    ADMIN_PASSWORD = "checkstatus8086"  # <<<<< CHANGE PASSWORD HERE
 
     if password != ADMIN_PASSWORD:
         return "<h3 style='color:red;'>❌ Wrong Password</h3>"
@@ -147,11 +147,11 @@ def predict_house_price(longitude, latitude, housing_median_age, total_rooms,
             'population': [float(population)],
             'households': [float(households)],
             'median_income': [float(median_income)],
-            'ocean_proximity': [str(ocean_proximity)]
+            'ocean_proximity': [ocean_proximity]
         })
 
         transformed_input = pipeline.transform(input_data)
-        prediction = float(model.predict(transformed_input)[0])
+        prediction = model.predict(transformed_input)[0]
 
         # Save to SQL
         conn = sqlite3.connect("housing_data.db")
@@ -163,9 +163,9 @@ def predict_house_price(longitude, latitude, housing_median_age, total_rooms,
         population, households, median_income, ocean_proximity, predicted_value)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
-            float(longitude), float(latitude), float(housing_median_age), float(total_rooms),
-            float(total_bedrooms), float(population), float(households), float(median_income),
-            str(ocean_proximity), prediction
+            longitude, latitude, housing_median_age, total_rooms,
+            total_bedrooms, population, households, median_income,
+            ocean_proximity, prediction
         ))
 
         conn.commit()
@@ -186,6 +186,7 @@ def predict_house_price(longitude, latitude, housing_median_age, total_rooms,
 init_db()
 train_model()
 
+# ============= CUSTOM CSS (working version) =============
 custom_css = """
     .gr-button-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
@@ -193,11 +194,15 @@ custom_css = """
     }
 """
 
+# -----------------------------
+# GRADIO UI (Corrected Order)
+# -----------------------------
 with gr.Blocks(css=custom_css,
                theme=gr.themes.Soft(primary_hue="indigo")) as demo:
 
     gr.Markdown("# 🏡 California Housing Price Predictor")
 
+    # Input Layout
     with gr.Row():
         with gr.Column():
             longitude = gr.Slider(-124.5, -114.0, -122.23, 0.01, label="Longitude")
@@ -239,5 +244,6 @@ with gr.Blocks(css=custom_css,
         inputs=admin_password,
         outputs=admin_output
     )
+
 
 demo.launch(share=True)
